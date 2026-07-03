@@ -1,0 +1,21 @@
+# Percorsi R2 usati dalla pipeline.
+# Il nome del bucket viene letto da variabile ambiente R2_BUCKET_NAME.
+# Questo file definisce solo il prefisso logico dentro il bucket.
+
+base_prefix: valore_aggiunto_imprese
+latest_prefix: valore_aggiunto_imprese/latest
+archive_prefix: valore_aggiunto_imprese/archive
+
+latest_files:
+  - official_eurostat_sbs.json
+  - official_oecd_sdbs.json
+  - business_demography_distribution.json
+  - italy_granular_sources.json
+  - dashboard_country_sector_size.json
+  - dashboard_metadata.json
+  - sources.json
+  - data_dictionary.json
+  - official_eurostat_sbs.parquet
+  - official_oecd_sdbs.parquet
+  - business_demography_distribution.parquet
+  - italy_granular_sources.parquet
