@@ -1,13 +1,9 @@
 pandas
 numpy
 requests
-pyarrow
 pyyaml
-boto3
 plotly
 matplotlib
 jupyter
 notebook
 nbformat
-python-dotenv
-duckdb
