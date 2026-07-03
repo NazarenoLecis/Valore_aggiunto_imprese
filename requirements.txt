@@ -1,7 +1,6 @@
 pandas
 numpy
 requests
-pyyaml
 plotly
 matplotlib
 jupyter
