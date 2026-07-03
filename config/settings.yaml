@@ -1,0 +1,40 @@
+project_name: valore_aggiunto_imprese
+language: it
+
+# Intervallo temporale usato dalla pipeline.
+# end_year: latest indica che gli script devono scaricare l'ultimo dato disponibile.
+start_year: 2008
+end_year: latest
+
+# La pipeline può essere eseguita anche senza upload R2.
+# Per il caricamento su R2 servono le variabili ambiente documentate in docs/r2_setup.md.
+upload_to_r2: true
+
+# Cartelle locali. Queste cartelle sono ignorate da Git, salvo i file .gitkeep.
+paths:
+  raw: data/raw
+  intermediate: data/intermediate
+  processed: data/processed
+  dashboard_json: data/dashboard_json
+
+# Paesi iniziali per test e grafici.
+# La lista completa dei paesi sta in config/countries.yaml.
+default_countries:
+  - IT
+  - FR
+  - DE
+  - ES
+  - NL
+  - BE
+  - AT
+  - SE
+  - DK
+  - FI
+
+# Metriche minime da produrre nei dataset finali.
+metrics:
+  - value_added
+  - enterprises
+  - persons_employed
+  - employees
+  - apparent_labour_productivity
