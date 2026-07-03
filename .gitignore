@@ -1,19 +1,24 @@
 # Cartelle dati locali
 # I dati scaricati e gli output generati dalla pipeline non vengono versionati.
-# R2 è il posto in cui pubblicare i file JSON e Parquet finali.
+# Il repository genera CSV, JSON e grafici locali. La pubblicazione esterna è fuori perimetro.
 data/raw/*
 data/intermediate/*
 data/processed/*
-data/dashboard_json/*
+data/processed_csv/*
+data/processed_json/*
+data/validation/*
+outputs/charts/*
 
 # Mantiene la struttura delle cartelle nel repository
 !data/raw/.gitkeep
 !data/intermediate/.gitkeep
 !data/processed/.gitkeep
-!data/dashboard_json/.gitkeep
+!data/processed_csv/.gitkeep
+!data/processed_json/.gitkeep
+!data/validation/.gitkeep
+!outputs/charts/.gitkeep
 
 # File dati pesanti o generati
-*.parquet
 *.csv
 *.xlsx
 *.xls
