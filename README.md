@@ -1,8 +1,8 @@
 # Valore aggiunto imprese
 
-Data pipeline per scaricare, pulire, armonizzare, validare ed esportare dati sul valore aggiunto generato dalle imprese per dimensione, paese, anno e settore.
+Repository per scaricare, pulire, armonizzare, validare e analizzare dati sul valore aggiunto generato dalle imprese per dimensione, paese, anno e settore.
 
-Il repository produce file JSON e Parquet da caricare su Cloudflare R2. La dashboard pubblica sarà sviluppata in un progetto separato su GitHub Pages e leggerà i JSON pubblicati su R2. Questo repository non contiene codice frontend, layout dashboard o workflow di deploy GitHub Pages.
+Il progetto genera dataset CSV e JSON, insieme a notebook e grafici di analisi commentati. Non gestisce upload su Cloudflare R2, non contiene codice frontend e non gestisce la dashboard GitHub Pages. L'eventuale pubblicazione dei JSON su R2 e la dashboard pubblica sono fuori dal perimetro di questo repository.
 
 ## Obiettivi
 
@@ -26,15 +26,19 @@ Incluso nel repository:
 - pulizia dati;
 - armonizzazione fonti;
 - validazione output;
-- esportazione JSON per dashboard esterna;
-- esportazione Parquet per archivio e riuso analitico;
-- upload su Cloudflare R2;
+- generazione dataset CSV;
+- generazione dataset JSON;
 - notebook di analisi;
 - notebook di grafici;
+- grafici esportati per controllo e riuso analitico;
+- commenti metodologici nei notebook;
 - documentazione metodologica.
 
 Fuori perimetro:
 
+- upload su Cloudflare R2;
+- credenziali R2;
+- workflow di caricamento su R2;
 - HTML della dashboard;
 - JavaScript della dashboard;
 - CSS della dashboard;
@@ -53,39 +57,28 @@ Fonti previste nella prima versione:
 
 ## Output
 
-Output analitici completi:
+Output tabellari completi:
 
 ```text
-data/processed/*.parquet
-data/processed/validation_report.json
-data/processed/validation_report.md
+data/processed_csv/*.csv
+data/processed_json/*.json
 ```
 
-Output per dashboard esterna:
+Output di validazione:
 
 ```text
-data/dashboard_json/*.json
+data/validation/validation_report.json
+data/validation/validation_report.md
 ```
 
-I file vengono caricati su R2 con questa struttura logica:
+Output grafici:
 
 ```text
-valore_aggiunto_imprese/
-  latest/
-    official_eurostat_sbs.json
-    official_oecd_sdbs.json
-    business_demography_distribution.json
-    italy_granular_sources.json
-    dashboard_country_sector_size.json
-    dashboard_metadata.json
-    sources.json
-    data_dictionary.json
-  archive/
-    YYYY-MM-DD/
-      ...
+outputs/charts/*.png
+outputs/charts/*.html
 ```
 
-La dashboard GitHub Pages deve leggere i file da `latest`.
+I file CSV e JSON sono generati localmente dalla pipeline. Possono poi essere usati da un altro progetto o caricati su R2 tramite una pipeline separata. Questo repository non esegue il caricamento.
 
 ## Flag metodologici
 
@@ -136,7 +129,6 @@ config/
   countries.yaml
   sectors.yaml
   size_classes.yaml
-  r2_paths.yaml
 
 src/
   utils/
@@ -152,9 +144,8 @@ scripts/
   04_download_istat_sources.py
   05_build_clean_datasets.py
   06_validate_outputs.py
-  07_export_json_for_dashboard.py
-  08_upload_to_r2.py
-  09_run_full_pipeline.py
+  07_export_csv_json.py
+  08_run_full_pipeline.py
 
 notebooks/
   01_esplorazione_fonti_eurostat_sbs.ipynb
@@ -164,16 +155,14 @@ notebooks/
   05_confronto_paesi_classi_ufficiali.ipynb
   06_focus_settoriale.ipynb
   07_metodologia_stima_classi_fini.ipynb
-  08_grafici_per_dashboard.ipynb
+  08_grafici_analisi_commentati.ipynb
 
 docs/
   metodologia.md
   fonti.md
   dizionario_dati.md
   note_qualita.md
-  r2_setup.md
-  github_actions.md
-  data_contract_dashboard.md
+  data_contract.md
 ```
 
 ## Regole di codice
@@ -188,7 +177,7 @@ Il codice del progetto segue queste regole:
 - commenti estensivi negli script;
 - notebook per analisi e grafici;
 - nessuna credenziale nel repository;
-- dati raw, processed e dashboard JSON esclusi da Git.
+- output CSV, JSON e grafici generati esclusi da Git.
 
 ## Installazione
 
@@ -201,7 +190,7 @@ pip install -r requirements.txt
 Esecuzione completa:
 
 ```bash
-python scripts/09_run_full_pipeline.py
+python scripts/08_run_full_pipeline.py
 ```
 
 Esecuzione per singola fase:
@@ -213,21 +202,21 @@ python scripts/03_download_oecd_sdbs.py
 python scripts/04_download_istat_sources.py
 python scripts/05_build_clean_datasets.py
 python scripts/06_validate_outputs.py
-python scripts/07_export_json_for_dashboard.py
-python scripts/08_upload_to_r2.py
+python scripts/07_export_csv_json.py
 ```
 
-## Configurazione R2
+## Notebook
 
-Le credenziali R2 devono essere impostate come variabili ambiente o come GitHub Actions secrets:
+I notebook devono essere parte centrale del progetto. Ogni notebook deve contenere:
 
-```text
-R2_ACCOUNT_ID
-R2_ACCESS_KEY_ID
-R2_SECRET_ACCESS_KEY
-R2_BUCKET_NAME
-R2_PUBLIC_BASE_URL
-```
+- obiettivo dell'analisi;
+- fonte usata;
+- controlli sulla copertura del dato;
+- grafici commentati;
+- note metodologiche;
+- limiti del dato.
+
+I grafici generati dai notebook devono essere esportabili in `outputs/charts/`.
 
 ## Documentazione
 
@@ -235,6 +224,6 @@ La metodologia è documentata in `docs/metodologia.md`.
 
 Le fonti sono documentate in `docs/fonti.md`.
 
-Il contratto dati per la dashboard esterna è documentato in `docs/data_contract_dashboard.md`.
+Il dizionario dei dati è documentato in `docs/dizionario_dati.md`.
 
-Il setup R2 è documentato in `docs/r2_setup.md`.
+Il contratto dati per eventuali progetti esterni è documentato in `docs/data_contract.md`.
