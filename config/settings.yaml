@@ -6,16 +6,15 @@ language: it
 start_year: 2008
 end_year: latest
 
-# La pipeline può essere eseguita anche senza upload R2.
-# Per il caricamento su R2 servono le variabili ambiente documentate in docs/r2_setup.md.
-upload_to_r2: true
-
 # Cartelle locali. Queste cartelle sono ignorate da Git, salvo i file .gitkeep.
 paths:
   raw: data/raw
   intermediate: data/intermediate
   processed: data/processed
-  dashboard_json: data/dashboard_json
+  processed_csv: data/processed_csv
+  processed_json: data/processed_json
+  validation: data/validation
+  charts: outputs/charts
 
 # Paesi iniziali per test e grafici.
 # La lista completa dei paesi sta in config/countries.yaml.
@@ -38,3 +37,9 @@ metrics:
   - persons_employed
   - employees
   - apparent_labour_productivity
+
+# Formati generati dalla pipeline.
+# Il repository non carica questi file su R2.
+output_formats:
+  - csv
+  - json
