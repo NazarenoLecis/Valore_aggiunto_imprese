@@ -1,0 +1,12 @@
+[project]
+name = "valore-aggiunto-imprese"
+version = "0.1.0"
+description = "Data pipeline per valore aggiunto, dimensione d'impresa e confronti internazionali."
+requires-python = ">=3.10"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = []
