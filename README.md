@@ -1,88 +1,114 @@
 # Valore aggiunto imprese
 
-Repository per scaricare, pulire, armonizzare, validare e analizzare dati sul valore aggiunto generato dalle imprese per dimensione, paese, anno e settore.
+Questo repository costruisce dati e grafici sul valore aggiunto generato dalle imprese per dimensione, paese, anno e settore.
 
-Il progetto genera dataset CSV e JSON, insieme a notebook e grafici di analisi commentati. Non gestisce upload su Cloudflare R2, non contiene codice frontend e non gestisce la dashboard GitHub Pages. L'eventuale pubblicazione dei JSON su R2 e la dashboard pubblica sono fuori dal perimetro di questo repository.
+L’obiettivo è avere una base dati pulita e riutilizzabile per confrontare Italia, paesi europei e paesi OCSE, distinguendo tra classi dimensionali ufficiali, distribuzioni più granulari delle imprese e possibili approfondimenti sull’Italia.
 
-## Obiettivi
+## Cosa produce
 
-Il progetto serve a costruire una base dati comparabile per analizzare:
+Il progetto genera tre tipi di output locali.
 
-- valore aggiunto per classe dimensionale d'impresa;
+Dataset CSV:
+
+```text
+data/processed_csv/
+```
+
+Dataset JSON:
+
+```text
+data/processed_json/
+```
+
+Grafici di analisi:
+
+```text
+outputs/charts/
+```
+
+I notebook contengono anche commenti metodologici, controlli sui dati e spiegazioni dei grafici.
+
+## Cosa analizza
+
+Il progetto serve a studiare:
+
+- valore aggiunto per classe dimensionale d’impresa;
 - numero di imprese per classe dimensionale;
 - occupazione per classe dimensionale;
-- produttività apparente del lavoro, calcolata come valore aggiunto per persona occupata;
-- confronto tra paesi europei e OCSE;
+- produttività apparente del lavoro;
+- confronto tra paesi europei;
+- confronto tra paesi OCSE;
 - confronto per settore;
-- approfondimento specifico sull'Italia, se sono disponibili fonti più granulari.
+- struttura delle microimprese;
+- granularità disponibile per l’Italia.
 
-La pipeline distingue sempre tra dato osservato, dato usato solo per distribuzioni e dato stimato. Ogni riga dei dataset finali contiene un campo `method_status`.
-
-## Perimetro
-
-Incluso nel repository:
-
-- download dati;
-- pulizia dati;
-- armonizzazione fonti;
-- validazione output;
-- generazione dataset CSV;
-- generazione dataset JSON;
-- notebook di analisi;
-- notebook di grafici;
-- grafici esportati per controllo e riuso analitico;
-- commenti metodologici nei notebook;
-- documentazione metodologica.
-
-Fuori perimetro:
-
-- upload su Cloudflare R2;
-- credenziali R2;
-- workflow di caricamento su R2;
-- HTML della dashboard;
-- JavaScript della dashboard;
-- CSS della dashboard;
-- layout GitHub Pages;
-- workflow di deploy GitHub Pages;
-- componenti frontend.
-
-## Fonti principali
-
-Fonti previste nella prima versione:
-
-- Eurostat Structural Business Statistics, per valore aggiunto, imprese e occupazione per classe dimensionale e settore nei paesi europei;
-- Eurostat Business Demography, per distribuzioni più granulari di imprese e occupazione;
-- OECD Structural and Demographic Business Statistics, per confronto OCSE;
-- ISTAT, per verificare se l'Italia consente dettaglio più granulare.
-
-## Output
-
-Output tabellari completi:
+La produttività apparente del lavoro viene calcolata come:
 
 ```text
-data/processed_csv/*.csv
-data/processed_json/*.json
+valore aggiunto / persone occupate
 ```
 
-Output di validazione:
+Non misura la produttività totale dei fattori.
+
+## Fonti previste
+
+Le fonti principali sono:
+
+- Eurostat Structural Business Statistics;
+- Eurostat Business Demography;
+- OECD Structural and Demographic Business Statistics;
+- ISTAT, per verificare eventuali dati più granulari sull’Italia.
+
+Eurostat SBS è la fonte principale per valore aggiunto, imprese e occupazione per classe dimensionale nei paesi europei.
+
+Eurostat Business Demography serve a descrivere meglio la distribuzione delle imprese, soprattutto nelle classi più piccole.
+
+OECD SDBS serve a estendere il confronto ai paesi OCSE.
+
+ISTAT serve a verificare se per l’Italia esistono dati più granulari rispetto alle classi pubblicate nelle fonti internazionali.
+
+## Classi dimensionali
+
+Classi ufficiali Eurostat usate come base comparabile:
 
 ```text
-data/validation/validation_report.json
-data/validation/validation_report.md
+0-9
+10-19
+20-49
+50-249
+250+
 ```
 
-Output grafici:
+Classi disponibili in alcune fonti di distribuzione:
 
 ```text
-outputs/charts/*.png
-outputs/charts/*.html
+0
+1-4
+5-9
+10+
 ```
 
-I file CSV e JSON sono generati localmente dalla pipeline. Possono poi essere usati da un altro progetto o caricati su R2 tramite una pipeline separata. Questo repository non esegue il caricamento.
+Classi sperimentali da usare solo se supportate da dati osservati o da una metodologia esplicita:
 
-## Flag metodologici
+```text
+0
+1
+2-4
+5-9
+10-14
+15-19
+20-49
+50-99
+100-249
+250-499
+500+
+```
 
-Valori ammessi per `method_status`:
+## Stato metodologico del dato
+
+Ogni riga dei dataset finali deve avere un campo `method_status`.
+
+Valori ammessi:
 
 ```text
 observed_official
@@ -165,35 +191,23 @@ docs/
   data_contract.md
 ```
 
-## Regole di codice
-
-Il codice del progetto segue queste regole:
-
-- funzioni riutilizzabili dentro `src/utils/`;
-- niente classi Python;
-- niente `argparse`;
-- niente file `__init__.py`;
-- configurazione tramite file YAML;
-- commenti estensivi negli script;
-- notebook per analisi e grafici;
-- nessuna credenziale nel repository;
-- output CSV, JSON e grafici generati esclusi da Git.
-
 ## Installazione
+
+Creare un ambiente Python e installare le dipendenze:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Uso
+## Esecuzione
 
-Esecuzione completa:
+Per eseguire tutta la pipeline:
 
 ```bash
 python scripts/08_run_full_pipeline.py
 ```
 
-Esecuzione per singola fase:
+Per eseguire una singola fase:
 
 ```bash
 python scripts/01_download_eurostat_sbs.py
@@ -207,23 +221,60 @@ python scripts/07_export_csv_json.py
 
 ## Notebook
 
-I notebook devono essere parte centrale del progetto. Ogni notebook deve contenere:
+I notebook servono a controllare i dati e produrre grafici commentati.
 
-- obiettivo dell'analisi;
+Ogni notebook deve contenere:
+
+- obiettivo dell’analisi;
 - fonte usata;
-- controlli sulla copertura del dato;
-- grafici commentati;
-- note metodologiche;
-- limiti del dato.
+- copertura temporale e geografica;
+- classi dimensionali disponibili;
+- controlli sui valori mancanti;
+- grafici;
+- commenti interpretativi;
+- note metodologiche.
 
-I grafici generati dai notebook devono essere esportabili in `outputs/charts/`.
+## Regole di codice
+
+Il codice segue queste regole:
+
+- funzioni riutilizzabili dentro `src/utils/`;
+- niente classi Python;
+- niente `argparse`;
+- niente file `__init__.py`;
+- configurazione tramite file YAML;
+- commenti estensivi negli script;
+- notebook per analisi e grafici;
+- output CSV, JSON e grafici generati esclusi da Git.
 
 ## Documentazione
 
-La metodologia è documentata in `docs/metodologia.md`.
+La metodologia è documentata in:
 
-Le fonti sono documentate in `docs/fonti.md`.
+```text
+docs/metodologia.md
+```
 
-Il dizionario dei dati è documentato in `docs/dizionario_dati.md`.
+Le fonti sono documentate in:
 
-Il contratto dati per eventuali progetti esterni è documentato in `docs/data_contract.md`.
+```text
+docs/fonti.md
+```
+
+Il dizionario dei dati è documentato in:
+
+```text
+docs/dizionario_dati.md
+```
+
+Le note sulla qualità del dato sono documentate in:
+
+```text
+docs/note_qualita.md
+```
+
+Il contratto dati è documentato in:
+
+```text
+docs/data_contract.md
+```
