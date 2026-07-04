@@ -65,22 +65,3 @@ PYTHONPATH=. python scripts/05_build_clean_datasets.py
 PYTHONPATH=. python scripts/06_validate_outputs.py
 PYTHONPATH=. python scripts/07_export_csv_json.py
 ```
-
-## Stato metodologico
-
-Ogni riga dei dataset finali deve avere `method_status`.
-
-Valori ammessi:
-
-```text
-observed_official
-distribution_only
-estimated_from_distribution
-italy_granular_observed
-experimental
-not_available
-```
-
-## Regole di codice
-
-Usare funzioni riutilizzabili in `src/utils/`. Evitare classi e file `__init__.py`. Definire le variabili operative in codice Python. Usare commenti estensivi negli script. Produrre notebook di analisi e grafici commentati.
