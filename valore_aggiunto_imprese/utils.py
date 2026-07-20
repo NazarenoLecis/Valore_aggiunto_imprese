@@ -139,9 +139,12 @@ def jsonstat_to_dataframe(data: dict[str, Any]) -> pd.DataFrame:
         return pd.DataFrame()
 
     categories_by_dimension: list[list[str]] = []
+    labels_by_dimension: dict[str, dict[str, str]] = {}
     for dimension_id in dimension_ids:
         dimension = data.get("dimension", {}).get(dimension_id, {})
-        index = dimension.get("category", {}).get("index", {})
+        category = dimension.get("category", {})
+        index = category.get("index", {})
+        labels_by_dimension[dimension_id] = category.get("label", {}) or {}
         if isinstance(index, dict):
             ordered_codes = [code for code, _ in sorted(index.items(), key=lambda item: item[1])]
         else:
@@ -161,6 +164,10 @@ def jsonstat_to_dataframe(data: dict[str, Any]) -> pd.DataFrame:
             quality_flag = statuses[flat_index] if flat_index < len(statuses) else None
 
         record = {dimension_id: combination[i] for i, dimension_id in enumerate(dimension_ids)}
+        for i, dimension_id in enumerate(dimension_ids):
+            label = labels_by_dimension.get(dimension_id, {}).get(combination[i])
+            if label is not None:
+                record[f"{dimension_id}_label"] = label
         record["value"] = value
         record["quality_flag"] = quality_flag
         records.append(record)

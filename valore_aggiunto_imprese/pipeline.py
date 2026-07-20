@@ -9,6 +9,8 @@ from valore_aggiunto_imprese.sources import (
     crea_inventario_oecd_sdbs,
     scarica_business_demography,
     scarica_eurostat_sbs,
+    scarica_national_accounts,
+    scarica_regional_gva,
 )
 from valore_aggiunto_imprese.transform import prepara_dataset_generico
 from valore_aggiunto_imprese.utils import (
@@ -39,6 +41,20 @@ CLEAN_DATASET_JOBS = [
         "method_status": "distribution_only",
     },
     {
+        "input": "national_accounts_value_added_raw.csv",
+        "output": "national_accounts_value_added.csv",
+        "source_name": "Eurostat National Accounts",
+        "dataset_id": "nama_10_a64",
+        "method_status": "observed_official",
+    },
+    {
+        "input": "regional_gva_raw.csv",
+        "output": "regional_value_added.csv",
+        "source_name": "Eurostat Regional Gross Value Added",
+        "dataset_id": "nama_10r_3gva",
+        "method_status": "observed_official",
+    },
+    {
         "input": "oecd_sdbs_inventory.csv",
         "output": "oecd_sdbs_inventory.csv",
         "source_name": "OECD Structural and Demographic Business Statistics",
@@ -66,6 +82,8 @@ VALIDATION_KEYS = [
 VALIDATION_FILES = [
     {"filename": "official_eurostat_sbs.csv", "key_columns": VALIDATION_KEYS},
     {"filename": "business_demography_distribution.csv", "key_columns": VALIDATION_KEYS},
+    {"filename": "national_accounts_value_added.csv", "key_columns": VALIDATION_KEYS},
+    {"filename": "regional_value_added.csv", "key_columns": VALIDATION_KEYS},
     {"filename": "oecd_sdbs_inventory.csv", "key_columns": ["source_dataset_id"]},
     {"filename": "istat_sources_inventory.csv", "key_columns": ["candidate_source"]},
 ]
@@ -73,6 +91,8 @@ VALIDATION_FILES = [
 EXPORT_DATASETS = {
     "official_eurostat_sbs": "official_eurostat_sbs.csv",
     "business_demography_distribution": "business_demography_distribution.csv",
+    "national_accounts_value_added": "national_accounts_value_added.csv",
+    "regional_value_added": "regional_value_added.csv",
     "oecd_sdbs_inventory": "oecd_sdbs_inventory.csv",
     "istat_sources_inventory": "istat_sources_inventory.csv",
 }
@@ -111,6 +131,42 @@ def download_sources(settings: dict[str, Any], sources: dict[str, Any]) -> None:
         build_path_from_settings(settings, "raw", "business_demography_metadata.json"),
     )
     print(f"Business Demography scaricato. Righe: {len(business_demography)}")
+
+    national_accounts, national_accounts_metadata = scarica_national_accounts(
+        settings=settings,
+        sources=sources,
+    )
+    write_dataframe_csv(
+        national_accounts,
+        build_path_from_settings(settings, "raw", "national_accounts_value_added_raw.csv"),
+    )
+    write_dataframe_json(
+        national_accounts,
+        build_path_from_settings(settings, "raw", "national_accounts_value_added_raw.json"),
+    )
+    write_json(
+        national_accounts_metadata,
+        build_path_from_settings(settings, "raw", "national_accounts_metadata.json"),
+    )
+    print(f"Conti nazionali Eurostat scaricati. Righe: {len(national_accounts)}")
+
+    regional_gva, regional_gva_metadata = scarica_regional_gva(
+        settings=settings,
+        sources=sources,
+    )
+    write_dataframe_csv(
+        regional_gva,
+        build_path_from_settings(settings, "raw", "regional_gva_raw.csv"),
+    )
+    write_dataframe_json(
+        regional_gva,
+        build_path_from_settings(settings, "raw", "regional_gva_raw.json"),
+    )
+    write_json(
+        regional_gva_metadata,
+        build_path_from_settings(settings, "raw", "regional_gva_metadata.json"),
+    )
+    print(f"Valore aggiunto regionale Eurostat scaricato. Righe: {len(regional_gva)}")
 
     oecd_inventory, oecd_metadata = crea_inventario_oecd_sdbs(settings=settings, sources=sources)
     write_dataframe_csv(

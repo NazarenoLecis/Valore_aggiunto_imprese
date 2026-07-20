@@ -49,6 +49,10 @@ Eurostat Structural Business Statistics e la fonte principale per valore aggiunt
 
 Eurostat Business Demography descrive la distribuzione delle imprese nelle classi piu piccole. Non contiene valore aggiunto e non viene usata per imputarlo automaticamente.
 
+Eurostat National Accounts aggiunge il valore aggiunto settoriale completo, inclusi agricoltura, silvicoltura, pesca, alloggio e ristorazione. Questa fonte serve alla dashboard per confrontare settori e paesi su un perimetro piu ampio del solo SBS.
+
+Eurostat Regional Gross Value Added aggiunge il valore aggiunto territoriale NUTS dove pubblicato. La granularita settoriale regionale e piu aggregata di quella dei conti nazionali A64.
+
 OECD Structural and Demographic Business Statistics e predisposta come fonte per estendere il confronto internazionale. La pipeline attuale crea un inventario operativo.
 
 ISTAT e predisposta per verificare fonti italiane piu granulari, per esempio Frame SBS, Frame territoriale, conti economici e microdati.
@@ -102,6 +106,8 @@ Il progetto separa dati osservati, dati di distribuzione e stime.
 Le classi comparabili Eurostat sono `0-9`, `10-19`, `20-49`, `50-249` e `250+`.
 
 Le micro-classi Business Demography sono usate come distribuzioni descrittive e non trasformano automaticamente il valore aggiunto osservato in stime fini.
+
+Per eta e titolo di studio non viene stimato valore aggiunto: se saranno integrate fonti su occupazione o salari, resteranno metriche diverse dal valore aggiunto.
 
 ## Qualita
 

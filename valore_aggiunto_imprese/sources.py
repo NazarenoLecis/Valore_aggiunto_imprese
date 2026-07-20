@@ -96,6 +96,93 @@ def scarica_business_demography(
     return df, metadata
 
 
+def scarica_national_accounts(
+    settings: dict[str, Any], sources: dict[str, Any]
+) -> tuple[pd.DataFrame, dict[str, Any]]:
+    """Scarica il valore aggiunto settoriale dai conti nazionali Eurostat."""
+    source_config = sources["eurostat_national_accounts"]
+    base_url = source_config["base_url"]
+    dataset_id = source_config["dataset_id"]
+    first_year = max(
+        int(settings["start_year"]),
+        int(source_config.get("first_year", settings["start_year"])),
+    )
+    configured_end_year = settings.get("end_year", "latest")
+    if configured_end_year == "latest":
+        end_year = int(source_config.get("last_year", datetime.now().year))
+    else:
+        end_year = min(
+            int(configured_end_year),
+            int(source_config.get("last_year", configured_end_year)),
+        )
+
+    params = {
+        "format": "JSON",
+        "lang": "en",
+        **source_config.get("filters", {}),
+        "geo": ["EU27_2020", *settings["default_countries"]],
+        "time": [str(year) for year in range(first_year, end_year + 1)],
+    }
+
+    df = scarica_jsonstat_dataset(base_url=base_url, dataset_id=dataset_id, params=params)
+    df["source_name"] = source_config["source_name"]
+    df["source_dataset_id"] = dataset_id
+    df["method_status"] = source_config.get("method_status", "observed_official")
+    df["download_timestamp"] = timestamp_utc()
+
+    metadata = {
+        "source_name": source_config["source_name"],
+        "dataset_id": dataset_id,
+        "rows": int(len(df)),
+        "download_timestamp": timestamp_utc(),
+        "note": source_config.get("note"),
+    }
+    return df, metadata
+
+
+def scarica_regional_gva(
+    settings: dict[str, Any], sources: dict[str, Any]
+) -> tuple[pd.DataFrame, dict[str, Any]]:
+    """Scarica il valore aggiunto regionale Eurostat per le regioni disponibili."""
+    source_config = sources["eurostat_regional_gva"]
+    base_url = source_config["base_url"]
+    dataset_id = source_config["dataset_id"]
+    first_year = max(
+        int(settings["start_year"]),
+        int(source_config.get("first_year", settings["start_year"])),
+    )
+    configured_end_year = settings.get("end_year", "latest")
+    if configured_end_year == "latest":
+        end_year = int(source_config.get("last_year", datetime.now().year))
+    else:
+        end_year = min(
+            int(configured_end_year),
+            int(source_config.get("last_year", configured_end_year)),
+        )
+
+    params = {
+        "format": "JSON",
+        "lang": "en",
+        **source_config.get("filters", {}),
+        "time": [str(year) for year in range(first_year, end_year + 1)],
+    }
+
+    df = scarica_jsonstat_dataset(base_url=base_url, dataset_id=dataset_id, params=params)
+    df["source_name"] = source_config["source_name"]
+    df["source_dataset_id"] = dataset_id
+    df["method_status"] = source_config.get("method_status", "observed_official")
+    df["download_timestamp"] = timestamp_utc()
+
+    metadata = {
+        "source_name": source_config["source_name"],
+        "dataset_id": dataset_id,
+        "rows": int(len(df)),
+        "download_timestamp": timestamp_utc(),
+        "note": source_config.get("note"),
+    }
+    return df, metadata
+
+
 def crea_inventario_oecd_sdbs(
     settings: dict[str, Any], sources: dict[str, Any]
 ) -> tuple[pd.DataFrame, dict[str, Any]]:

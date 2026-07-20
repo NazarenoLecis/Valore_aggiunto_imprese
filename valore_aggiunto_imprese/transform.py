@@ -32,17 +32,26 @@ def prepara_dataset_generico(
     # settore, classe dimensionale e indicatore. Qui copiamo i codici originali
     # quando esistono e lasciamo vuoti i campi armonizzati da completare.
     output["country_code"] = output.get("geo")
-    output["country_name"] = None
+    output["country_name"] = output.get("geo_label")
     output["year"] = output.get("time")
     output["sector_code_original"] = output.get("nace_r2", output.get("isic4"))
-    output["sector_label_original"] = output["sector_code_original"]
+    output["sector_label_original"] = output.get("nace_r2_label", output["sector_code_original"])
     output["sector_code_harmonised"] = output["sector_code_original"]
     output["sector_label_harmonised"] = output["sector_label_original"]
     output["sector_level"] = None
     output["size_class_original"] = output.get("size_emp", output.get("sizeclas"))
     output["size_class_harmonised"] = output["size_class_original"]
-    output["metric_code"] = output.get("indic_sbs", output.get("indic_sb", output.get("measure")))
-    output["metric_label"] = output["metric_code"]
+    output["metric_code"] = output.get(
+        "indic_sbs",
+        output.get("indic_sb", output.get("na_item", output.get("measure"))),
+    )
+    output["metric_label"] = output.get(
+        "indic_sbs_label",
+        output.get("indic_sb_label", output.get("na_item_label", output["metric_code"])),
+    )
+    if dataset_id == "nama_10r_3gva":
+        output["metric_code"] = "B1G"
+        output["metric_label"] = "Value added, gross"
     output["unit"] = output.get("unit")
     output["source_url"] = None
     output["notes"] = None

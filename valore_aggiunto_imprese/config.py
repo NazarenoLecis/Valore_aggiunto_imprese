@@ -95,6 +95,52 @@ SOURCES = {
             "sizeclas": ["0", "1-4", "5-9"],
         },
     },
+    "eurostat_national_accounts": {
+        "source_name": "Eurostat National Accounts",
+        "dataset_id": "nama_10_a64",
+        "base_url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data",
+        "note": (
+            "Fonte per valore aggiunto settoriale completo, inclusi agricoltura, "
+            "silvicoltura, pesca, alloggio e ristorazione."
+        ),
+        "method_status": "observed_official",
+        "first_year": 2020,
+        "last_year": 2024,
+        "filters": {
+            "freq": "A",
+            "unit": "CP_MEUR",
+            "na_item": "B1G",
+        },
+    },
+    "eurostat_regional_gva": {
+        "source_name": "Eurostat Regional Gross Value Added",
+        "dataset_id": "nama_10r_3gva",
+        "base_url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data",
+        "note": "Fonte per valore aggiunto regionale NUTS dove disponibile.",
+        "method_status": "observed_official",
+        "first_year": 2020,
+        "last_year": 2024,
+        "filters": {
+            "freq": "A",
+            "unit": "CP_MEUR",
+            "nace_r2": [
+                "TOTAL",
+                "A",
+                "B-E",
+                "C",
+                "F",
+                "G-I",
+                "G-J",
+                "J",
+                "K-N",
+                "K",
+                "L",
+                "M_N",
+                "O-Q",
+                "R-U",
+            ],
+        },
+    },
     "oecd_sdbs": {
         "source_name": "OECD Structural and Demographic Business Statistics",
         "dataset_id": "DSD_SDBSBSC_ISIC4",
