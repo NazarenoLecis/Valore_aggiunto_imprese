@@ -63,6 +63,7 @@ PROJECT_SETTINGS = {
 }
 
 EUROSTAT_SBS_SECTORS = [
+    "B-S_X_O_S94",
     "B",
     "C",
     "D",
@@ -254,7 +255,7 @@ SOURCES = {
             "freq": "A",
             "indic_sbs": ["AV_MEUR", "ENT_NR", "EMP_NR", "SAL_NR", "LABPRY_TEUR"],
             "nace_r2": EUROSTAT_SBS_SECTORS,
-            "size_emp": ["0-9", "10-19", "20-49", "50-249", "GE250"],
+            "size_emp": ["TOTAL", "0-9", "10-19", "20-49", "50-249", "GE250"],
         },
     },
     "eurostat_business_demography": {
