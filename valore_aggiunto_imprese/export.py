@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from src.utils.io_utils import write_dataframe_csv, write_dataframe_json
+from valore_aggiunto_imprese.utils import write_dataframe_csv, write_dataframe_json
 
 
 def esporta_dataset_csv_json(

@@ -1,8 +1,9 @@
-pandas
-numpy
-requests
-plotly
-matplotlib
-jupyter
-notebook
-nbformat
+pandas>=2.2.0
+numpy>=1.26.0
+requests>=2.31.0
+plotly>=5.18.0
+matplotlib>=3.8.0
+jupyter>=1.0.0
+notebook>=7.0.0
+nbformat>=5.9.0
+ruff>=0.8.0

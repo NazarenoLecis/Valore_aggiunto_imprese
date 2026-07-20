@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from src.utils.dataframe_utils import normalizza_nomi_colonne, ordina_colonne_output
+from valore_aggiunto_imprese.utils import normalizza_nomi_colonne, ordina_colonne_output
 
 
 def prepara_dataset_generico(
@@ -41,7 +41,7 @@ def prepara_dataset_generico(
     output["sector_level"] = None
     output["size_class_original"] = output.get("size_emp", output.get("sizeclas"))
     output["size_class_harmonised"] = output["size_class_original"]
-    output["metric_code"] = output.get("indic_sb", output.get("measure"))
+    output["metric_code"] = output.get("indic_sbs", output.get("indic_sb", output.get("measure")))
     output["metric_label"] = output["metric_code"]
     output["unit"] = output.get("unit")
     output["source_url"] = None
