@@ -107,8 +107,6 @@ Le classi comparabili Eurostat sono `0-9`, `10-19`, `20-49`, `50-249` e `250+`.
 
 Le micro-classi Business Demography sono usate come distribuzioni descrittive e non trasformano automaticamente il valore aggiunto osservato in stime fini.
 
-Per eta e titolo di studio non viene stimato valore aggiunto: se saranno integrate fonti su occupazione o salari, resteranno metriche diverse dal valore aggiunto.
-
 ## Qualita
 
 La pipeline valida colonne obbligatorie, valori ammessi di `method_status` e duplicati rispetto alle chiavi logiche. Ogni notebook usa l'ultimo anno con valori disponibili per la metrica rappresentata, cosi evita grafici vuoti quando una fonte ha aggiornamenti non uniformi tra indicatori.

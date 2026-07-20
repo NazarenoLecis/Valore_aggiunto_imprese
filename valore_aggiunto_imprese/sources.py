@@ -10,6 +10,32 @@ import pandas as pd
 from valore_aggiunto_imprese.utils import scarica_jsonstat_dataset, timestamp_utc
 
 
+def scarica_jsonstat_a_blocchi(
+    base_url: str,
+    dataset_id: str,
+    params: dict[str, Any],
+    dimensione: str,
+    dimensione_blocco: int = 20,
+) -> pd.DataFrame:
+    valori = list(params.get(dimensione, []))
+    if not valori:
+        return scarica_jsonstat_dataset(base_url=base_url, dataset_id=dataset_id, params=params)
+
+    blocchi = []
+    for start in range(0, len(valori), dimensione_blocco):
+        params_blocco = dict(params)
+        params_blocco[dimensione] = valori[start:start + dimensione_blocco]
+        blocchi.append(
+            scarica_jsonstat_dataset(
+                base_url=base_url,
+                dataset_id=dataset_id,
+                params=params_blocco,
+            )
+        )
+
+    return pd.concat(blocchi, ignore_index=True) if blocchi else pd.DataFrame()
+
+
 def scarica_eurostat_sbs(
     settings: dict[str, Any], sources: dict[str, Any]
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
@@ -34,7 +60,13 @@ def scarica_eurostat_sbs(
         "time": [str(year) for year in range(first_year, end_year + 1)],
     }
 
-    df = scarica_jsonstat_dataset(base_url=base_url, dataset_id=dataset_id, params=params)
+    df = scarica_jsonstat_a_blocchi(
+        base_url=base_url,
+        dataset_id=dataset_id,
+        params=params,
+        dimensione="nace_r2",
+        dimensione_blocco=16,
+    )
     df["source_name"] = source_config["source_name"]
     df["source_dataset_id"] = dataset_id
     df["method_status"] = source_config.get("method_status", "observed_official")
@@ -79,7 +111,13 @@ def scarica_business_demography(
         "time": [str(year) for year in range(first_year, end_year + 1)],
     }
 
-    df = scarica_jsonstat_dataset(base_url=base_url, dataset_id=dataset_id, params=params)
+    df = scarica_jsonstat_a_blocchi(
+        base_url=base_url,
+        dataset_id=dataset_id,
+        params=params,
+        dimensione="nace_r2",
+        dimensione_blocco=16,
+    )
     df["source_name"] = source_config["source_name"]
     df["source_dataset_id"] = dataset_id
     df["method_status"] = source_config.get("method_status", "distribution_only")
@@ -124,7 +162,13 @@ def scarica_national_accounts(
         "time": [str(year) for year in range(first_year, end_year + 1)],
     }
 
-    df = scarica_jsonstat_dataset(base_url=base_url, dataset_id=dataset_id, params=params)
+    df = scarica_jsonstat_a_blocchi(
+        base_url=base_url,
+        dataset_id=dataset_id,
+        params=params,
+        dimensione="nace_r2",
+        dimensione_blocco=18,
+    )
     df["source_name"] = source_config["source_name"]
     df["source_dataset_id"] = dataset_id
     df["method_status"] = source_config.get("method_status", "observed_official")
@@ -167,7 +211,13 @@ def scarica_regional_gva(
         "time": [str(year) for year in range(first_year, end_year + 1)],
     }
 
-    df = scarica_jsonstat_dataset(base_url=base_url, dataset_id=dataset_id, params=params)
+    df = scarica_jsonstat_a_blocchi(
+        base_url=base_url,
+        dataset_id=dataset_id,
+        params=params,
+        dimensione="nace_r2",
+        dimensione_blocco=16,
+    )
     df["source_name"] = source_config["source_name"]
     df["source_dataset_id"] = dataset_id
     df["method_status"] = source_config.get("method_status", "observed_official")
