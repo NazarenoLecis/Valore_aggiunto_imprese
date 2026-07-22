@@ -134,6 +134,7 @@ METRIC_LABELS = {
     "ENT_NR": "Imprese",
     "EMP_NR": "Persone occupate",
     "SAL_NR": "Dipendenti",
+    "HW_NR": "Ore lavorate dai dipendenti",
     "LABPRY_TEUR": "Produttivita apparente (migliaia euro)",
     "V11910": "Imprese attive",
     "V16910": "Persone occupate",

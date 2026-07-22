@@ -245,7 +245,7 @@ SOURCES = {
         "dataset_id": "sbs_sc_ovw",
         "base_url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data",
         "note": (
-            "Fonte principale per valore aggiunto, imprese e occupazione "
+            "Fonte principale per valore aggiunto, imprese, occupazione e ore lavorate "
             "per classe dimensionale."
         ),
         "method_status": "observed_official",
@@ -253,7 +253,7 @@ SOURCES = {
         "last_year": 2024,
         "filters": {
             "freq": "A",
-            "indic_sbs": ["AV_MEUR", "ENT_NR", "EMP_NR", "SAL_NR", "LABPRY_TEUR"],
+            "indic_sbs": ["AV_MEUR", "ENT_NR", "EMP_NR", "SAL_NR", "HW_NR", "LABPRY_TEUR"],
             "nace_r2": EUROSTAT_SBS_SECTORS,
             "size_emp": ["TOTAL", "0-9", "10-19", "20-49", "50-249", "GE250"],
         },

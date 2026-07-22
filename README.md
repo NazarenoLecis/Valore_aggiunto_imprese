@@ -45,7 +45,7 @@ I dati scaricati e gli output generati non sono versionati.
 
 ## Fonti
 
-Eurostat Structural Business Statistics e la fonte principale per valore aggiunto, imprese, occupazione e produttivita apparente per classe dimensionale nei paesi UE.
+Eurostat Structural Business Statistics è la fonte principale per valore aggiunto, imprese, occupazione, ore lavorate e produttività apparente per classe dimensionale nei paesi UE.
 
 Eurostat Business Demography descrive la distribuzione delle imprese nelle classi piu piccole. Non contiene valore aggiunto e non viene usata per imputarlo automaticamente.
 
@@ -53,9 +53,9 @@ Eurostat National Accounts aggiunge il valore aggiunto settoriale completo, incl
 
 Eurostat Regional Gross Value Added aggiunge il valore aggiunto territoriale NUTS dove pubblicato. La granularita settoriale regionale e piu aggregata di quella dei conti nazionali A64.
 
-OECD Structural and Demographic Business Statistics e predisposta come fonte per estendere il confronto internazionale. La pipeline attuale crea un inventario operativo.
+OECD Structural and Demographic Business Statistics è predisposta come fonte per estendere il confronto internazionale. La pipeline attuale crea un inventario operativo.
 
-ISTAT e predisposta per verificare fonti italiane piu granulari, per esempio Frame SBS, Frame territoriale, conti economici e microdati.
+ISTAT è predisposta per verificare fonti italiane più granulari, per esempio Frame SBS, Frame territoriale, conti economici e microdati.
 
 ## Paesi
 
